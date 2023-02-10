@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { ARRAY_CONTEXT } from "../App";
 
 const FormComponent = ({
   fields,
@@ -7,12 +8,13 @@ const FormComponent = ({
   current,
   setCurrent,
   type,
+  uid,
 }) => {
+  const ARRAY = useContext(ARRAY_CONTEXT);
   const [selectField, setSelectField] = useState("");
   const [condition, setCondition] = useState("");
   const [val, setVal] = useState("");
   useEffect(() => {
-    console.log(condition);
     let curr = "";
     let conditionType = "";
     if (type === "all") {
@@ -31,7 +33,6 @@ const FormComponent = ({
             : conditionsInteger[condition]
         } ${val})`
       );
-    console.log("after--->", current);
   }, [
     condition,
     selectField,
@@ -42,6 +43,17 @@ const FormComponent = ({
     current,
     type,
   ]);
+  const deleteRow = (uid) => {
+    // console.log("Index to be deleted,", ARRAY.array);
+    for (let i = 0; i < ARRAY.array.length; i++) {
+      console.log("index", i, ARRAY.array[i]);
+      if (ARRAY.array[i].id === uid) {
+        console.log("CURRENT--->", current);
+        ARRAY.array.splice(i, 1);
+        ARRAY.setArray([...ARRAY.array]);
+      }
+    }
+  };
   return (
     <>
       <div className="d-flex mb-4">
@@ -94,10 +106,18 @@ const FormComponent = ({
         <span style={{ margin: "0% 4% 0% 2%" }}>
           <input
             type="text"
-            style={{width:'250px'}}
+            style={{ width: "250px" }}
             className="form-control"
             onChange={(e) => setVal(e.target.value)}
           />
+        </span>
+        <span>
+          {/* {console.log("Index Clicked", uid)} */}
+          {uid === 0 ? null : (
+            <button className="btn btn-danger" onClick={() => deleteRow(uid)}>
+              Delete
+            </button>
+          )}
         </span>
       </div>
     </>

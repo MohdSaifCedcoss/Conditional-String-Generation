@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import { ARRAY_CONTEXT } from "../App";
 import FormComponent from "./FormComponent";
 
 const ConditionGeneration = () => {
+  const ARRAY = useContext(ARRAY_CONTEXT);
   const [conditionType, setCondtionType] = useState("");
-  const [array, setArray] = useState([]);
+  // const [array, setArray] = useState([]);
   const [current, setCurrent] = useState("");
   const fields = ["Title", "Quantity", "Price", "Brand"];
   const conditionsString = {
@@ -20,30 +22,39 @@ const ConditionGeneration = () => {
     "Greater Than Equals": ">=",
   };
   useEffect(() => {
-    setArray([
-      ...array,
-      <FormComponent
-        fields={fields}
-        conditionsInteger={conditionsInteger}
-        conditionsString={conditionsString}
-        current={current}
-        setCurrent={setCurrent}
-        type={conditionType}
-      />,
-    ]);
+    let obj = {
+      id: 0,
+      data: (
+        <FormComponent
+          fields={fields}
+          conditionsInteger={conditionsInteger}
+          conditionsString={conditionsString}
+          current={current}
+          setCurrent={setCurrent}
+          type={conditionType}
+          uid={0}
+        />
+      ),
+    };
+    ARRAY.setArray([...ARRAY.array, obj]);
   }, []);
   const addRow = () => {
-    setArray([
-      ...array,
-      <FormComponent
-        fields={fields}
-        conditionsInteger={conditionsInteger}
-        conditionsString={conditionsString}
-        current={current}
-        setCurrent={setCurrent}
-        type={conditionType}
-      />,
-    ]);
+    let id = Math.ceil(Math.random() * 1212121);
+    let obj = {
+      id: id,
+      data: (
+        <FormComponent
+          fields={fields}
+          conditionsInteger={conditionsInteger}
+          conditionsString={conditionsString}
+          current={current}
+          setCurrent={setCurrent}
+          type={conditionType}
+          uid={id}
+        />
+      ),
+    };
+    ARRAY.setArray([...ARRAY.array, obj]);
   };
   return (
     <div className="main_container">
@@ -70,10 +81,10 @@ const ConditionGeneration = () => {
         <br />
         <br />
       </div>
-      {array.length > 0 ? (
+      {ARRAY.array.length > 0 ? (
         <>
-          {array.map((item, index) => (
-            <div key={index}>{item}</div>
+          {ARRAY.array.map((item, index) => (
+            <div key={index}>{item.data}</div>
           ))}
         </>
       ) : null}
