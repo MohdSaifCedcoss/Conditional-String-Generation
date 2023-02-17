@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { ARRAY_CONTEXT } from "../App";
+ import { ARRAY_CONTEXT } from "../App";
 import FormComponent from "./FormComponent";
 
 const ConditionGeneration = () => {
