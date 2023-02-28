@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { ARRAY_CONTEXT } from "../App";
 
 const FormComponent = ({
@@ -15,24 +15,23 @@ const FormComponent = ({
   const [condition, setCondition] = useState("");
   const [val, setVal] = useState("");
   useEffect(() => {
-    let curr = "";
     let conditionType = "";
     if (type === "all") {
       conditionType = "&&";
     } else if (type === "any") {
       conditionType = "||";
     }
-    if (current === null) {
-      curr = "";
-    } else curr = current;
-    if (condition !== "")
-      setCurrent(
-        `${curr} ${conditionType} (${selectField} ${
+    if (condition !== "") {
+      let obj = {
+        id: uid,
+        data: ` ${conditionType} (${selectField} ${
           selectField === "Title" || selectField === "Brand"
             ? conditionsString[condition]
             : conditionsInteger[condition]
-        } ${val})`
-      );
+        } ${val})`,
+      };
+      setCurrent([...current, obj]);
+    }
   }, [
     condition,
     selectField,
@@ -42,18 +41,42 @@ const FormComponent = ({
     setCurrent,
     current,
     type,
+    uid,
   ]);
   const deleteRow = (uid) => {
-    // console.log("Index to be deleted,", ARRAY.array);
+    console.log("UID passed", uid);
     for (let i = 0; i < ARRAY.array.length; i++) {
-      console.log("index", i, ARRAY.array[i]);
+      console.log("index of array", i, ARRAY.array[i]);
       if (ARRAY.array[i].id === uid) {
-        console.log("CURRENT--->", current);
+        // console.log("CURRENT--->", current);
         ARRAY.array.splice(i, 1);
         ARRAY.setArray([...ARRAY.array]);
+        for (let j = 0; j < current.length; j++) {
+          if (current[j].id === uid) {
+            current.splice(j, 1);
+            setCurrent([...current, { id: 12121, data: "asasasas  " }]);
+          }
+        }
       }
     }
   };
+  const dele = useCallback((uid) => {
+    console.log("UID passed", uid);
+    for (let i = 0; i < ARRAY.array.length; i++) {
+      console.log("index of array", i, ARRAY.array[i]);
+      if (ARRAY.array[i].id === uid) {
+        // console.log("CURRENT--->", current);
+        ARRAY.array.splice(i, 1);
+        ARRAY.setArray([...ARRAY.array]);
+        for (let j = 0; j < current.length; j++) {
+          if (current[j].id === uid) {
+            current.splice(j, 1); 
+            setCurrent([...current, { id: 12121, data: "asasasas   " }]);
+          }
+        }
+      }
+    }
+  }, [current]);
   return (
     <>
       <div className="d-flex mb-4">
@@ -114,7 +137,7 @@ const FormComponent = ({
         <span>
           {/* {console.log("Index Clicked", uid)} */}
           {uid === 0 ? null : (
-            <button className="btn btn-danger" onClick={() => deleteRow(uid)}>
+            <button className="btn btn-danger" onClick={() => dele(uid)}>
               Delete
             </button>
           )}
@@ -125,3 +148,4 @@ const FormComponent = ({
 };
 
 export default FormComponent;
+

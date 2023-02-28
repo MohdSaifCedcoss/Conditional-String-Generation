@@ -1,12 +1,12 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
- import { ARRAY_CONTEXT } from "../App";
+import { ARRAY_CONTEXT } from "../App";
 import FormComponent from "./FormComponent";
 
 const ConditionGeneration = () => {
   const ARRAY = useContext(ARRAY_CONTEXT);
   const [conditionType, setCondtionType] = useState("");
   // const [array, setArray] = useState([]);
-  const [current, setCurrent] = useState("");
+  const [current, setCurrent] = useState([]);
   const fields = ["Title", "Quantity", "Price", "Brand"];
   const conditionsString = {
     Equals: "==",
@@ -93,7 +93,16 @@ const ConditionGeneration = () => {
       </button>
       <br />
       <br />
-      {current !== "" ? <strong>Current Condition : {current}</strong> : null}
+      {current.length > 0 ? (
+        <div className="d-flex">
+          <strong className="me-3">Current Condition : </strong>{" "}
+          {current.map((item, index) => (
+            <div className="d-flex" key={index}>
+              <strong >{item.data}</strong>
+            </div>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 };
