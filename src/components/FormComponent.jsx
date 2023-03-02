@@ -1,20 +1,28 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import { ARRAY_CONTEXT } from "../App";
+import React, { useState } from "react";
 
-const FormComponent = ({
-  fields,
-  conditionsInteger,
-  conditionsString,
-  current,
-  setCurrent,
-  type,
-  uid,
-}) => {
-  const ARRAY = useContext(ARRAY_CONTEXT);
+const FormComponent = ({ current, setCurrent, type, uid }) => {
   const [selectField, setSelectField] = useState("");
   const [condition, setCondition] = useState("");
   const [val, setVal] = useState("");
-  useEffect(() => {
+  const fields = ["Title", "Quantity", "Price", "Brand"];
+
+  // To get the conditions
+  const conditionsString = {
+    Equals: "==",
+    "Not Equals": "!=",
+    Contain: ".contains",
+    "Not Contain": "!contains",
+  };
+
+  const conditionsInteger = {
+    Equals: "==",
+    "Not Equals": "!=",
+    "Less Than Equals": "<=",
+    "Greater Than Equals": ">=",
+  };
+
+  // This will create the current string
+  const currentString = () => {
     let conditionType = "";
     if (type === "all") {
       conditionType = "&&";
@@ -24,7 +32,7 @@ const FormComponent = ({
     if (condition !== "") {
       let obj = {
         id: uid,
-        data: ` ${conditionType} (${selectField} ${
+        data: ` ${uid === 0 ? "" : `${conditionType}`} (${selectField} ${
           selectField === "Title" || selectField === "Brand"
             ? conditionsString[condition]
             : conditionsInteger[condition]
@@ -32,51 +40,8 @@ const FormComponent = ({
       };
       setCurrent([...current, obj]);
     }
-  }, [
-    condition,
-    selectField,
-    val,
-    conditionsInteger,
-    conditionsString,
-    setCurrent,
-    current,
-    type,
-    uid,
-  ]);
-  const deleteRow = (uid) => {
-    console.log("UID passed", uid);
-    for (let i = 0; i < ARRAY.array.length; i++) {
-      console.log("index of array", i, ARRAY.array[i]);
-      if (ARRAY.array[i].id === uid) {
-        // console.log("CURRENT--->", current);
-        ARRAY.array.splice(i, 1);
-        ARRAY.setArray([...ARRAY.array]);
-        for (let j = 0; j < current.length; j++) {
-          if (current[j].id === uid) {
-            current.splice(j, 1);
-            setCurrent([...current, { id: 12121, data: "asasasas  " }]);
-          }
-        }
-      }
-    }
   };
-  const dele = useCallback((uid) => {
-    console.log("UID passed", uid);
-    for (let i = 0; i < ARRAY.array.length; i++) {
-      console.log("index of array", i, ARRAY.array[i]);
-      if (ARRAY.array[i].id === uid) {
-        // console.log("CURRENT--->", current);
-        ARRAY.array.splice(i, 1);
-        ARRAY.setArray([...ARRAY.array]);
-        for (let j = 0; j < current.length; j++) {
-          if (current[j].id === uid) {
-            current.splice(j, 1); 
-            setCurrent([...current, { id: 12121, data: "asasasas   " }]);
-          }
-        }
-      }
-    }
-  }, [current]);
+
   return (
     <>
       <div className="d-flex mb-4">
@@ -135,12 +100,12 @@ const FormComponent = ({
           />
         </span>
         <span>
-          {/* {console.log("Index Clicked", uid)} */}
-          {uid === 0 ? null : (
-            <button className="btn btn-danger" onClick={() => dele(uid)}>
-              Delete
-            </button>
-          )}
+          <button
+            className="btn btn-outline-primary"
+            onClick={() => currentString()}
+          >
+            Create
+          </button>
         </span>
       </div>
     </>
@@ -148,4 +113,3 @@ const FormComponent = ({
 };
 
 export default FormComponent;
-

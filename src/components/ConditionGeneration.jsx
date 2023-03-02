@@ -1,60 +1,29 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { ARRAY_CONTEXT } from "../App";
 import FormComponent from "./FormComponent";
 
 const ConditionGeneration = () => {
   const ARRAY = useContext(ARRAY_CONTEXT);
   const [conditionType, setCondtionType] = useState("");
-  // const [array, setArray] = useState([]);
   const [current, setCurrent] = useState([]);
-  const fields = ["Title", "Quantity", "Price", "Brand"];
-  const conditionsString = {
-    Equals: "==",
-    "Not Equals": "!=",
-    Contain: ".contains",
-    "Not Contain": "!contains",
+  // This will add row 
+  const addRow = (id) => {
+    ARRAY.setArray([...ARRAY.array, id]);
   };
-
-  const conditionsInteger = {
-    Equals: "==",
-    "Not Equals": "!=",
-    "Less Than Equals": "<=",
-    "Greater Than Equals": ">=",
-  };
-  useEffect(() => {
-    let obj = {
-      id: 0,
-      data: (
-        <FormComponent
-          fields={fields}
-          conditionsInteger={conditionsInteger}
-          conditionsString={conditionsString}
-          current={current}
-          setCurrent={setCurrent}
-          type={conditionType}
-          uid={0}
-        />
-      ),
-    };
-    ARRAY.setArray([...ARRAY.array, obj]);
-  }, []);
-  const addRow = () => {
-    let id = Math.ceil(Math.random() * 1212121);
-    let obj = {
-      id: id,
-      data: (
-        <FormComponent
-          fields={fields}
-          conditionsInteger={conditionsInteger}
-          conditionsString={conditionsString}
-          current={current}
-          setCurrent={setCurrent}
-          type={conditionType}
-          uid={id}
-        />
-      ),
-    };
-    ARRAY.setArray([...ARRAY.array, obj]);
+  // This will delete the row
+  const dele = (uid) => {
+    for (let i = 0; i < ARRAY.array.length; i++) {
+      if (parseFloat(ARRAY.array[i]) === uid) {
+        ARRAY.array.splice(i, 1);
+        ARRAY.setArray([...ARRAY.array]);
+      }
+      for (let j = 0; j < current.length; j++) {
+        if (current[j].id === uid) {
+          current.splice(j, 1);
+          setCurrent([...current]);
+        }
+      }
+    }
   };
   return (
     <div className="main_container">
@@ -81,14 +50,36 @@ const ConditionGeneration = () => {
         <br />
         <br />
       </div>
+      <FormComponent
+        current={current}
+        setCurrent={setCurrent}
+        type={conditionType}
+        uid={0}
+      />
       {ARRAY.array.length > 0 ? (
         <>
           {ARRAY.array.map((item, index) => (
-            <div key={index}>{item.data}</div>
+            <div key={index} className="d-flex">
+              {" "}
+              <FormComponent
+                current={current}
+                setCurrent={setCurrent}
+                type={conditionType}
+                uid={item}
+              />
+              <div style={{ marginLeft: "12%" }}>
+                <button className="btn btn-danger" onClick={() => dele(item)}>
+                  Delete
+                </button>
+              </div>
+            </div>
           ))}
         </>
       ) : null}
-      <button className="btn btn-primary" onClick={addRow}>
+      <button
+        className="btn btn-primary"
+        onClick={() => addRow(Math.ceil(Math.random() * 12121212))}
+      >
         Add More
       </button>
       <br />
@@ -98,7 +89,7 @@ const ConditionGeneration = () => {
           <strong className="me-3">Current Condition : </strong>{" "}
           {current.map((item, index) => (
             <div className="d-flex" key={index}>
-              <strong >{item.data}</strong>
+              <strong>{item.data}</strong>
             </div>
           ))}
         </div>
