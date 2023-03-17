@@ -6,8 +6,18 @@ const ConditionGeneration = () => {
   const ARRAY = useContext(ARRAY_CONTEXT);
   const [conditionType, setCondtionType] = useState("");
   const [current, setCurrent] = useState([]);
-  // This will add row 
+  // This will add row
   const addRow = (id) => {
+    if (conditionType === "") {
+      alert("Please Select Condition First");
+      return;
+    } else if (ARRAY.array.length === 0 && current.length === 0) {
+      alert("Firstly Create Condition then add !");
+      return;
+    } else if (ARRAY.array.length >= current.length) {
+      alert("Firstly Create Condition then add !");
+      return;
+    }
     ARRAY.setArray([...ARRAY.array, id]);
   };
   // This will delete the row
@@ -67,7 +77,7 @@ const ConditionGeneration = () => {
                 type={conditionType}
                 uid={item}
               />
-              <div style={{ marginLeft: "12%" }}>
+              <div style={{ marginLeft: "10px" }}>
                 <button className="btn btn-danger" onClick={() => dele(item)}>
                   Delete
                 </button>

@@ -45,7 +45,7 @@ const FormComponent = ({ current, setCurrent, type, uid }) => {
   return (
     <>
       <div className="d-flex mb-4">
-        <span style={{ marginRight: "2%" }}>
+        <span style={{ marginRight: "22px" }}>
           <select
             style={{ width: "250px" }}
             className="form-select"
@@ -61,7 +61,7 @@ const FormComponent = ({ current, setCurrent, type, uid }) => {
             ))}
           </select>
         </span>
-        <span style={{ margin: "0% 4% 0% 2%" }}>
+        <span style={{ margin: "0% 22px 0% 30px" }}>
           <select
             className="form-select"
             style={{ width: "250px" }}
@@ -91,7 +91,7 @@ const FormComponent = ({ current, setCurrent, type, uid }) => {
             )}
           </select>
         </span>
-        <span style={{ margin: "0% 4% 0% 2%" }}>
+        <span style={{ margin: "0% 22px 0% 30px" }}>
           <input
             type="text"
             style={{ width: "250px" }}
@@ -99,7 +99,7 @@ const FormComponent = ({ current, setCurrent, type, uid }) => {
             onChange={(e) => setVal(e.target.value)}
           />
         </span>
-        <span>
+        <span className="ms-4">
           <button
             className="btn btn-outline-primary"
             onClick={() => currentString()}
